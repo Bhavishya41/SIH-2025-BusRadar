@@ -10,8 +10,8 @@ import Header from './components/Header'
 const App = () => {
 	return (
 		<>
-			<Header />
 		<BrowserRouter>
+			<Header />
 			{/* <header className="border-b bg-white">
 				<div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
 					<Link to="/" className="text-lg font-semibold text-gray-900">Bus Tracker</Link>

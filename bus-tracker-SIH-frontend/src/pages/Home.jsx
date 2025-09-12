@@ -1,9 +1,11 @@
 import React from 'react';
 import { MapPin, Clock, Bell, ArrowRight, Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 
 const BusTracker = () => {
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative flex flex-col items-center justify-center pt-10 overflow-hidden">
       {/* Custom Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-fixed"
@@ -17,7 +19,7 @@ const BusTracker = () => {
       
       {/* Dark Overlay */}
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
           background: 'linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.7) 100%)'
         }}
@@ -33,8 +35,8 @@ const BusTracker = () => {
         </svg>
       </div>
 
-      {/* Header */}
-      <header className="relative z-50 px-6 py-4">
+      
+      {/* <header className="relative z-50 px-6 py-4">
         <nav className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
@@ -46,16 +48,16 @@ const BusTracker = () => {
           <div className="hidden md:flex items-center space-x-8 text-white/80">
             <a href="#" className="hover:text-white transition-colors">About</a>
             <a href="#" className="hover:text-white transition-colors">Contact</a>
-            {/* <a href="#" className="hover:text-white transition-colors">Login</a> */}
+            <a href="#" className="hover:text-white transition-colors">Login</a>
           </div>
           
-          {/* <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-red-500/25 flex items-center space-x-2">
+           <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-red-500/25 flex items-center space-x-2">
             <span>Start Tracking</span>
             <ArrowRight className="w-4 h-4" />
-          </button> */}
+          </button>
         </nav>
-      </header>
-
+      </header> */}
+      
       {/* Main Content */}
       <main className="relative z-10 px-6 pt-16 pb-32">
         <div className="max-w-7xl mx-auto">
@@ -79,12 +81,10 @@ const BusTracker = () => {
             
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
 
-              {/* <button className="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-red-500/25 flex items-center space-x-3 group"> */}
-              <button className="bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 flex items-center space-x-3">
-
+              <Link to="/findbuses" className="bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 flex items-center space-x-3 group">
                 <span>Start Tracking</span>
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </button>
+              </Link>
               
               {/* <button className="bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 flex items-center space-x-3">
                 <Play className="w-5 h-5" />

@@ -5,9 +5,12 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import BusMap from './pages/BusMap'
 import FindBuses from './pages/FindBuses'
+import Header from './components/Header'
 
 const App = () => {
 	return (
+		<>
+			<Header />
 		<BrowserRouter>
 			{/* <header className="border-b bg-white">
 				<div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
@@ -18,15 +21,17 @@ const App = () => {
 					</nav>
 				</div>
 			</header> */}
+			
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/signup" element={<Signup />} />
-				<Route path='busmap' element={<BusMap />} />
-				<Route path='FindBuses' element={<FindBuses />} />
+				<Route path='/busmap' element={<BusMap />} />
+				<Route path='/findbuses' element={<FindBuses />} />
 
 			</Routes>
 		</BrowserRouter>
+		</>
 	)
 }
 

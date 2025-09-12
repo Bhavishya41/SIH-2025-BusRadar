@@ -1,3 +1,6 @@
 @import "tailwindcss";
 /* @import "tailwindcss/preflight";
 @import "tailwindcss/utilities"; */
+body{
+    background-color: rgba(0,0,0,0.85);
+}

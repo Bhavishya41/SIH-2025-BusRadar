@@ -19,7 +19,7 @@ export default function FindBuses() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-10">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-10 pt-20">
       <h1 className="text-5xl font-extrabold text-center mb-12">Real-Time Public Transport Tracking</h1>
 
       <div className="max-w-xl mx-auto bg-gray-800 p-8 rounded-2xl shadow-2xl">
@@ -54,7 +54,7 @@ export default function FindBuses() {
             >
               <span className="text-2xl font-medium">{bus.name}</span>
               <button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition"
+                className="bg-blue-600 hover:bg-blue-700 m-3 text-white px-5 py-2 rounded-lg transition"
                 onClick={() => handleTrackBus(bus.id)}
               >
                 Track Live

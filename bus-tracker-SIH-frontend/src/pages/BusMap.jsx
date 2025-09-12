@@ -27,14 +27,18 @@ export default function BusMap() {
 
     const socket = io('http://localhost:8000');
 
-    socket.on('recieve-location', (data) => {
-      // If your emitted location uses busId, adjust check accordingly
-      if (data.id === busId || data.busId === busId) {
-        if (data.latitude && data.longitude) {
+    const handleLocation = (data) => {
+      if (!data) return;
+      // Accept either legacy structure (data.id) or new structure (busId only)
+      if (data.busId === busId || data.id === busId) {
+        if (typeof data.latitude === 'number' && typeof data.longitude === 'number') {
           setBusLocation([data.latitude, data.longitude]);
         }
       }
-    });
+    };
+
+    socket.on('bus-location', handleLocation); // New standardized event
+    socket.on('recieve-location', handleLocation); // Backward compatibility
 
     return () => {
       socket.disconnect();

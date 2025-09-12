@@ -35,7 +35,7 @@ const Login = () => {
 			localStorage.setItem('authToken', data.token)
 			localStorage.setItem('authUser', JSON.stringify(data.user))
 			localStorage.setItem('authRole', data.role)
-			navigate('/')
+			navigate('/startJourney')
 		} catch (err) {
 			setError(err.message || 'Failed to login. Please try again.')
 			console.log(err)

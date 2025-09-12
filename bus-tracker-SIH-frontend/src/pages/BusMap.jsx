@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { io } from 'socket.io-client';
 import 'leaflet/dist/leaflet.css';
-import { getBusDetails } from '../services/api'; // Adjust path if needed
+import { getBusDetails } from '../api/api'; // Adjust path if needed
 
 export default function BusMap() {
   const { busId } = useParams();
@@ -28,8 +28,11 @@ export default function BusMap() {
     const socket = io('http://localhost:8000');
 
     socket.on('recieve-location', (data) => {
-      if (data.id === busId) {
-        setBusLocation([data.latitude, data.longitude]);
+      // If your emitted location uses busId, adjust check accordingly
+      if (data.id === busId || data.busId === busId) {
+        if (data.latitude && data.longitude) {
+          setBusLocation([data.latitude, data.longitude]);
+        }
       }
     });
 
@@ -38,9 +41,15 @@ export default function BusMap() {
     };
   }, [busId]);
 
-  if (!busLocation || !busDetails) {
+  if (!busDetails) {
     return <div className="text-white text-center pt-40">Loading Bus Data...</div>;
   }
+
+  const stopsList = busDetails.route?.stops
+    ? busDetails.route.stops.map(s => s.name).join(', ')
+    : 'No stops';
+
+  
 
   // ... JSX remains the same
   return (
@@ -54,15 +63,19 @@ export default function BusMap() {
           {busDetails.route && (
             <>
               <p><span className="font-semibold">Route:</span> {busDetails.route.name}</p>
-              <p><span className="font-semibold">Stops:</span> {busDetails.route.stops.map(stop => stop.name).join(', ')}</p>
+              <p><span className="font-semibold">Stops:</span> {stopsList}</p>
             </>
           )}
         </div>
         <div className="md:w-1/2 w-full">
-          <MapContainer center={busLocation} zoom={15} className="h-[500px] w-[500px] rounded-2xl shadow-lg">
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={busLocation}></Marker>
-          </MapContainer>
+          {busLocation ? (
+            <MapContainer center={busLocation} zoom={15} className="h-[500px] w-[500px] rounded-2xl shadow-lg">
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <Marker position={busLocation}></Marker>
+            </MapContainer>
+          ) : (
+            <div className="h-[500px] w-[500px] flex items-center justify-center bg-gray-800 rounded-2xl">Waiting for live location...</div>
+          )}
         </div>
       </div>
     </div>

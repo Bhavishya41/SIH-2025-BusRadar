@@ -14,17 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get a single route by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const route = await Route.findById(req.params.id).populate('stops');
-    if (!route) return res.status(404).json({ error: 'Route not found' });
-    res.json({ route });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch route' });
-  }
-});
-
+// Find routes given from & to stop names (MUST be before '/:id')
 router.get('/find', async (req, res) => {
     const { from, to } = req.query;
     if (!from || !to) {
@@ -62,7 +52,54 @@ router.get('/find', async (req, res) => {
         res.json({ routes: validRoutes });
     } catch (err) {
         res.status(500).json({ error: 'Failed to find routes' });
+        console.log(err);
     }
+});
+
+// Get a single route by ID (placed AFTER /find to avoid capturing 'find' as :id)
+router.get('/:id', async (req, res) => {
+  try {
+    const route = await Route.findById(req.params.id).populate('stops');
+    if (!route) return res.status(404).json({ error: 'Route not found' });
+    res.json({ route });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch route' });
+  }
+});
+
+router.post('/stops', async (req, res) => {
+  const { name, coordinates } = req.body; // coordinates: [lng, lat]
+  if (!name || !Array.isArray(coordinates) || coordinates.length !== 2) {
+    return res.status(400).json({ error: 'name and coordinates [lng, lat] are required' });
+  }
+  try {
+    const stop = new Stop({ name, location: { type: 'Point', coordinates } });
+    await stop.save();
+    res.status(201).json({ stop });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create stop' });
+  }
+});
+
+// Create a new route with existing stop IDs (admin only)
+// Body: { routeId, name, stops: [stopObjectId1, stopObjectId2, ...] }
+router.post('/', async (req, res) => {
+  const { routeId, name, stops } = req.body;
+  if (!routeId || !name || !Array.isArray(stops) || stops.length < 2) {
+    return res.status(400).json({ error: 'routeId, name and at least two stop ids are required' });
+  }
+  try {
+    const existing = await Route.findOne({ routeId });
+    if (existing) {
+      return res.status(409).json({ error: 'Route with this routeId already exists' });
+    }
+    const route = new Route({ routeId, name, stops });
+    await route.save();
+    await route.populate('stops');
+    res.status(201).json({ route });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create route' });
+  }
 });
 
 module.exports = router;

@@ -12,7 +12,6 @@ const Header = () => (
 			</div>
 			<div className="hidden md:flex items-center space-x-8 text-white/80">
 				<Link to="/login" className="hover:text-white transition-colors">Login</Link>
-				<Link to="/signup" className="hover:text-white transition-colors">SignUp</Link>
 			</div>
 			
 		</nav>

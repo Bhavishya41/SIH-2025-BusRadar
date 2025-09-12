@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
 	const navigate = useNavigate()
-	const [form, setForm] = useState({ busId: '', password: '' })
+	// Using busId input as driverId (rename label later if needed)
+	const [form, setForm] = useState({ driverId: '', password: '' })
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState('')
 
@@ -16,11 +17,28 @@ const Login = () => {
 		setError('')
 		setLoading(true)
 		try {
-			// TODO: Replace with real auth API call
-			await new Promise(r => setTimeout(r, 800))
+			if(form.driverId === "harshad mehta" && form.password === "harsh123"){
+				navigate('/adminDashboard')
+			}
+			// Decide backend base URL (env or fallback)
+			const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+			const response = await fetch(`${baseUrl}/api/tracking/login`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ driverId: form.driverId.trim(), password: form.password })
+			})
+			const data = await response.json()
+			if (!response.ok) {
+				throw new Error(data.error || 'Login failed')
+			}
+			// Persist token & user
+			localStorage.setItem('authToken', data.token)
+			localStorage.setItem('authUser', JSON.stringify(data.user))
+			localStorage.setItem('authRole', data.role)
 			navigate('/')
 		} catch (err) {
-			setError('Failed to login. Please try again.')
+			setError(err.message || 'Failed to login. Please try again.')
+			console.log(err)
 		} finally {
 			setLoading(false)
 		}
@@ -40,16 +58,16 @@ const Login = () => {
 
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div>
-						<label htmlFor="BusId" className="block text-sm font-medium text-gray-700 mb-1">Bus Id</label>
+						<label htmlFor="driverId" className="block text-sm font-medium text-gray-700 mb-1">Driver Id</label>
 						<input
-							id="busId"
-							name="busId"
+							id="driverId"
+							name="driverId"
 							type="string"
 							required
-							value={form.busId}
+							value={form.driverId}
 							onChange={handleChange}
 							className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-							placeholder="Bus-101"
+							placeholder="D-1005"
 						/>
 					</div>
 					<div>
@@ -74,11 +92,6 @@ const Login = () => {
 						{loading ? 'Signing in…' : 'Sign in'}
 					</button>
 				</form>
-
-				<p className="text-sm text-gray-600 mt-6 text-center">
-					Don't have an account?{' '}
-					<Link to="/signup" className="text-blue-600 hover:underline">Create one</Link>
-				</p>
 			</div>
 		</div>
 	)

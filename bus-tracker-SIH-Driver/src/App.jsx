@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import Home from './pages/Home'
+import AdminDashboard from './pages/adminDashboard'
 import Login from './pages/Login'
-import Signup from './pages/Signup'
 import Header from './components/Header'
 
 const App = () => {
@@ -14,8 +14,7 @@ const App = () => {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/login" element={<Login />} />
-				<Route path="/signup" element={<Signup />} />
-
+				<Route path="/adminDashboard" element={<AdminDashboard />} />
 			</Routes>
 		</BrowserRouter>
 		</>

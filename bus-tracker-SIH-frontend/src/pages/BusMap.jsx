@@ -70,6 +70,7 @@ export default function BusMap() {
               <p><span className="font-semibold">Stops:</span> {stopsList}</p>
             </>
           )}
+          <p><span className="font-semibold">Estimated arrival time: </span> 10 mins until your stop (this is a demo, the actuall implementation will be done using trained AI model) </p>
         </div>
         <div className="md:w-1/2 w-full">
           {busLocation ? (
